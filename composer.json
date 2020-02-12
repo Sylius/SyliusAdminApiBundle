@@ -1,5 +1,5 @@
 {
-    "name": "sylius/api-bundle",
+    "name": "sylius/admin-api-bundle",
     "type": "symfony-bundle",
     "description": "APIs management for Symfony projects.",
     "keywords": ["api", "rest"],
