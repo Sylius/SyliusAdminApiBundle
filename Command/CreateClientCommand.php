@@ -19,6 +19,7 @@ use SyliusLabs\Polyfill\Symfony\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * @deprecated Fetching dependencies directly from container is not recommended from Symfony 3.4. Extending `ContainerAwareCommand` will be removed in 2.0
@@ -64,7 +65,12 @@ EOT
     {
         if (null === $this->clientManager) {
             @trigger_error('Fetching services directly from the container is deprecated since Sylius 1.2 and will be removed in 2.0.', \E_USER_DEPRECATED);
-            $this->clientManager = $this->getContainer()->get('fos_oauth_server.client_manager.default');
+
+            $clientManager = $this->getContainer()->get('fos_oauth_server.client_manager.default');
+
+            Assert::isInstanceOf($clientManager, ClientManagerInterface::class);
+
+            $this->clientManager = $clientManager;
         }
 
         /** @var Client $client */
