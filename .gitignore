@@ -1,5 +1,5 @@
-vendor/
-bin/
+/vendor/
 
-composer.phar
-composer.lock
+/.phpunit.result.cache
+/composer.phar
+/composer.lock

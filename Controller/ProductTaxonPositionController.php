@@ -16,7 +16,6 @@ namespace Sylius\Bundle\AdminApiBundle\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Component\Core\Model\ProductTaxonInterface;
 use Sylius\Component\Core\Repository\ProductTaxonRepositoryInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +30,7 @@ final class ProductTaxonPositionController
     private $manager;
 
     public function __construct(
-        RepositoryInterface $productTaxonRepository,
+        ProductTaxonRepositoryInterface $productTaxonRepository,
         EntityManagerInterface $manager
     ) {
         $this->productTaxonRepository = $productTaxonRepository;
