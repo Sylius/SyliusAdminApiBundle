@@ -49,7 +49,7 @@
         <service id="jms_serializer.serialized_name_annotation_strategy" class="JMS\Serializer\Naming\SerializedNameAnnotationStrategy" public="false">
             <argument type="service" id="jms_serializer.identical_property_naming_strategy" />
         </service>
-        
+
         <service id="Sylius\Bundle\AdminApiBundle\Validator\Constraint\ProductVariantOptionsValidator">
             <tag name="validator.constraint_validator" alias="sylius_admin_api.validator.product_variant_options" />
         </service>
