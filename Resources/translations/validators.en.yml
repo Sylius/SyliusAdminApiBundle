@@ -1,0 +1,4 @@
+sylius_admin_api:
+    option_values:
+        not_empty: Option Values cannot be empty.
+        not_null: Option Values cannot be null.
