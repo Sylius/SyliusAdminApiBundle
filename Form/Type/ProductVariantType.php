@@ -16,9 +16,12 @@ namespace Sylius\Bundle\AdminApiBundle\Form\Type;
 use Sylius\Bundle\ProductBundle\Form\Type\ProductVariantType as BaseProductVariantType;
 use Sylius\Component\Core\Model\ProductVariantInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 final class ProductVariantType extends AbstractType
 {
@@ -26,14 +29,21 @@ final class ProductVariantType extends AbstractType
     {
         $builder->addEventListener(FormEvents::PRE_SUBMIT, static function (FormEvent $event): void {
             $data = $event->getData();
+            $form = $event->getForm();
 
             if (!array_key_exists('onHand', $data)) {
-                $form = $event->getForm();
                 $form->remove('onHand');
             }
 
-            if (!array_key_exists('optionValues', $data)) {
-                $form = $event->getForm();
+            if (array_key_exists('optionValues', $data)) {
+                $form->add('optionValuesData', CollectionType::class,
+                    [
+                        'constraints' => [new NotBlank(['groups' => 'sylius']), new NotNull(['groups' => 'sylius'])],
+                        'mapped' => false
+                    ]);
+
+                $form->get('optionValuesData')->setData($data['optionValues']);
+            } else {
                 $form->remove('optionValues');
             }
         });
