@@ -45,6 +45,7 @@ final class ProductTaxonPositionController
             return new JsonResponse(null, Response::HTTP_NO_CONTENT);
         }
 
+        /** @psalm-suppress InvalidIterator */
         foreach ($productsPositions as $positionData) {
             if (!is_numeric($positionData['position'])) {
                 throw new HttpException(
