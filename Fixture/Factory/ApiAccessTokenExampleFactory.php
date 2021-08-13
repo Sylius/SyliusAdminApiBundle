@@ -88,7 +88,7 @@ class ApiAccessTokenExampleFactory extends AbstractExampleFactory
                 return $user;
             })
             ->setDefault('token', function (Options $options): string {
-                return $this->faker->md5;
+                return $this->faker->md5();
             })
             ->setDefault('client', LazyOption::randomOne($this->clientRepository))
             ->setAllowedTypes('client', ['string', ClientInterface::class, 'null'])
