@@ -51,10 +51,6 @@
         "twig/twig": "^2.12",
         "vimeo/psalm": "4.6.4"
     },
-    "conflict": {
-        "babdev/pagerfanta-bundle": "2.11.0",
-        "pagerfanta/pagerfanta": "2.7.2"
-    },
     "config": {
         "sort-packages": true
     },
