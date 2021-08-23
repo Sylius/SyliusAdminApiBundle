@@ -24,7 +24,25 @@ jms_serializer:
         directories:
             sylius-core:
                 namespace_prefix: "Sylius\\Component\\Core"
-                path: "@SyliusAdminApiBundle/Resources/config/serializer"
+                path: "@SyliusAdminApiBundle/Resources/config/serializer/coreBundle"
+            sylius-addressing:
+                namespace_prefix: "Sylius\\Component\\Addressing"
+                path: "@SyliusAdminApiBundle/Resources/config/serializer/addressingBundle"
+            sylius-currency:
+                namespace_prefix: "Sylius\\Component\\Currency"
+                path: "@SyliusAdminApiBundle/Resources/config/serializer/currencyBundle"
+            sylius-locale:
+                namespace_prefix: "Sylius\\Component\\Locale"
+                path: "@SyliusAdminApiBundle/Resources/config/serializer/localeBundle"
+            sylius-product:
+                namespace_prefix: "Sylius\\Component\\Product"
+                path: "@SyliusAdminApiBundle/Resources/config/serializer/productBundle"
+            sylius-shipping:
+                namespace_prefix: "Sylius\\Component\\Shipping"
+                path: "@SyliusAdminApiBundle/Resources/config/serializer/shippingBundle"
+            sylius-taxation:
+                namespace_prefix: "Sylius\\Component\\Taxation"
+                path: "@SyliusAdminApiBundle/Resources/config/serializer/taxationBundle"
 
 parameters:
     sylius.security.api_regex: "^/api/v1"
