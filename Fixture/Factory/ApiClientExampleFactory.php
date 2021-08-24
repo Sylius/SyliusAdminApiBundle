@@ -62,7 +62,7 @@ class ApiClientExampleFactory extends AbstractExampleFactory
                 return $this->faker->unique()->randomNumber(8);
             })
             ->setDefault('secret', function (Options $options): string {
-                return $this->faker->uuid;
+                return $this->faker->uuid();
             })
             ->setDefault('allowed_grant_types', [])
             ->setAllowedTypes('allowed_grant_types', ['array'])
