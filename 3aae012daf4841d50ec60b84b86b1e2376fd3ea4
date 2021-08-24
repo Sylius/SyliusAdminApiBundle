@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------
+
+by Zales0123 at 2021-08-24T09:51:12Z
+
+We should not move serializations, as they still could be used by people not using AdminApiBundle - it would be a big BC break 🖖
+
+---------------------------------------------------------------------------
+
+by Zales0123 at 2021-08-24T09:51:24Z
+
+Thank you, Adam! :tada:
