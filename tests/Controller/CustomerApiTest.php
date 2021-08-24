@@ -150,8 +150,9 @@ EOT;
         $this->assertResponse($response, 'customer/index_response', Response::HTTP_OK);
     }
 
-//    temporary disabled
 //    /**
+//     * This functionality does not work with sylius 1.10. Application throws 500 instead of 404 because service
+//     * "ConvertNotValidMaxPerPageToNotFoundListener.php" from PagerfantaBundle does not register with Sylius 1.10
 //     * @test
 //     */
 //    public function it_returns_page_not_found_if_limit_is_set_to_0()
