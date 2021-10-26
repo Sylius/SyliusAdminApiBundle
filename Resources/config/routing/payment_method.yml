@@ -12,3 +12,22 @@ sylius_admin_api_payment_method:
         criteria:
             code: $code
     type: sylius.resource_api
+
+sylius_admin_api_payment_method_create:
+    path: /payment-methods/{factory}
+    methods: [POST]
+    defaults:
+        _controller: sylius.controller.payment_method:createAction
+        _sylius:
+            serialization_groups: [ Default, Detailed ]
+            serialization_version: $version
+            section: admin_api
+            form: Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodType
+            factory:
+                method: createWithGateway
+                arguments:
+                    gatewayFactory: $factory
+            vars:
+                route:
+                    parameters:
+                        factory: $factory
