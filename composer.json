@@ -51,6 +51,9 @@
         "twig/twig": "^2.12",
         "vimeo/psalm": "4.6.4"
     },
+    "conflict": {
+        "doctrine/dbal": "^3"
+    },
     "config": {
         "sort-packages": true
     },
