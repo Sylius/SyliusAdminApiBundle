@@ -42,6 +42,7 @@ final class PaymentMethodApiTest extends JsonApiTestCase
     {
         $this->loadFixturesFromFiles([
             'resources/channels.yml',
+            'resources/gateway_config.yml',
             'resources/payment_methods.yml',
         ]);
 
@@ -72,6 +73,7 @@ final class PaymentMethodApiTest extends JsonApiTestCase
         $paymentMethods = $this->loadFixturesFromFiles([
             'authentication/api_administrator.yml',
             'resources/channels.yml',
+            'resources/gateway_config.yml',
             'resources/payment_methods.yml',
         ]);
 
@@ -92,6 +94,7 @@ final class PaymentMethodApiTest extends JsonApiTestCase
         $this->loadFixturesFromFiles([
             'authentication/api_administrator.yml',
             'resources/channels.yml',
+            'resources/gateway_config.yml',
             'resources/payment_methods.yml',
         ]);
 
@@ -105,6 +108,91 @@ final class PaymentMethodApiTest extends JsonApiTestCase
 
         $response = $this->client->getResponse();
         $this->assertResponse($response, 'payment_method/index_response', Response::HTTP_OK);
+    }
+
+    /**
+     * @test
+     */
+    public function it_allows_creating_payment_method(): void
+    {
+        $this->loadFixturesFromFiles([
+            'authentication/api_administrator.yml',
+            'resources/channels.yml',
+            'resources/gateway_config.yml',
+        ]);
+
+        $data = <<<JSON
+{
+    "code": "test_payment_method",
+    "enabled": true,
+    "translations": {
+        "en_US": {
+            "name": "Test Payment Method",
+            "description": "Description of Test Payment Method",
+            "instructions": "Instructions of Test Payment Method"
+        }
+    },
+    "channels": ["WEB"],
+    "position": 1
+}
+JSON;
+
+        $this->client->request(
+            'POST',
+            '/api/v1/payment-methods/offline',
+            [],
+            [],
+            self::$authorizedHeaderWithContentType,
+            $data
+        );
+
+        $this->assertResponse(
+            $this->client->getResponse(),
+            'payment_method/create_response',
+            Response::HTTP_CREATED
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_allow_creating_payment_methods_when_not_authorized(): void
+    {
+        $this->loadFixturesFromFiles([
+            'resources/channels.yml',
+            'resources/gateway_config.yml',
+        ]);
+
+        $data = <<<JSON
+{
+    "code": "test_payment_method",
+    "enabled": true,
+    "translations": {
+        "en_US": {
+            "name": "Test Payment Method",
+            "description": "Description of Test Payment Method",
+            "instructions": "Instructions of Test Payment Method"
+        }
+    },
+    "channels": ["WEB"],
+    "position": 1
+}
+JSON;
+
+        $this->client->request(
+            'POST',
+            '/api/v1/payment-methods/offline',
+            [],
+            [],
+            [],
+            $data
+        );
+
+        $this->assertResponse(
+            $this->client->getResponse(),
+            'authentication/access_denied_response',
+            Response::HTTP_UNAUTHORIZED
+        );
     }
 
     private function getPaymentMethodUrl(PaymentMethodInterface $paymentMethod): string
