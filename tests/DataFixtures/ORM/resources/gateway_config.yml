@@ -1,0 +1,5 @@
+Sylius\Bundle\PayumBundle\Model\GatewayConfig:
+    offline:
+        gatewayName: "Offline"
+        factoryName: "offline"
+        config: []
