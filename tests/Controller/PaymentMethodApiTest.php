@@ -41,7 +41,7 @@ final class PaymentMethodApiTest extends JsonApiTestCase
      */
     public function it_does_not_allow_to_show_payment_methods_list_when_access_is_denied()
     {
-        $paymentMethods = $this->loadFixturesFromFiles([
+        $this->loadFixturesFromFiles([
             'resources/channels.yml',
             'resources/payment_methods.yml',
         ]);
@@ -90,7 +90,7 @@ final class PaymentMethodApiTest extends JsonApiTestCase
      */
     public function it_allows_indexing_payment_methods()
     {
-        $paymentMethods = $this->loadFixturesFromFiles([
+        $this->loadFixturesFromFiles([
             'authentication/api_administrator.yml',
             'resources/channels.yml',
             'resources/payment_methods.yml',
