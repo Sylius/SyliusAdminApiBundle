@@ -321,7 +321,6 @@ JSON;
     public function it_does_not_allow_partial_updates_when_not_authorized(): void
     {
         $paymentMethods = $this->loadFixturesFromFiles([
-            'authentication/api_administrator.yml',
             'resources/channels.yml',
             'resources/gateway_config.yml',
             'resources/payment_methods.yml',
@@ -343,6 +342,58 @@ JSON;
             [],
             [],
             $data
+        );
+
+        $this->assertResponse(
+            $this->client->getResponse(),
+            'authentication/access_denied_response',
+            Response::HTTP_UNAUTHORIZED
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_allows_deleting_payment_methods(): void
+    {
+        $paymentMethods = $this->loadFixturesFromFiles([
+            'authentication/api_administrator.yml',
+            'resources/channels.yml',
+            'resources/gateway_config.yml',
+            'resources/payment_methods.yml',
+        ]);
+
+        /** @var PaymentMethodInterface $paymentMethod */
+        $paymentMethod = $paymentMethods['cash_on_delivery'];
+
+        $this->client->request(
+            'DELETE',
+            $this->getPaymentMethodUrl($paymentMethod),
+            [],
+            [],
+            self::$authorizedHeaderWithContentType
+        );
+
+        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_allow_deleting_payment_methods_when_not_authorized(): void
+    {
+        $paymentMethods = $this->loadFixturesFromFiles([
+            'resources/channels.yml',
+            'resources/gateway_config.yml',
+            'resources/payment_methods.yml',
+        ]);
+
+        /** @var PaymentMethodInterface $paymentMethod */
+        $paymentMethod = $paymentMethods['cash_on_delivery'];
+
+        $this->client->request(
+            'DELETE',
+            $this->getPaymentMethodUrl($paymentMethod)
         );
 
         $this->assertResponse(
