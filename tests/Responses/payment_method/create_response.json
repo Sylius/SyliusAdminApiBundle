@@ -1,0 +1,41 @@
+{
+    "id": @integer@,
+    "code": "test_payment_method",
+    "position": 1,
+    "createdAt": @datetime@,
+    "updatedAt": @datetime@,
+    "enabled": true,
+    "translations": {
+        "en_US": {
+            "locale": "en_US",
+            "id": @integer@,
+            "name": "Test Payment Method",
+            "description": "Description of Test Payment Method",
+            "instructions": "Instructions of Test Payment Method"
+        }
+    },
+    "channels": [
+        {
+            "id": @integer@,
+            "code": "WEB",
+            "name": "Web Channel",
+            "description": "Lorem ipsum",
+            "hostname": "localhost",
+            "color": "black",
+            "createdAt": @datetime@,
+            "updatedAt": @datetime@,
+            "enabled": true,
+            "taxCalculationStrategy": "order_items_based",
+            "_links": {
+                "self": {
+                    "href": "\/api\/v1\/channels\/WEB"
+                }
+            }
+        }
+    ],
+    "_links": {
+        "self": {
+            "href": "\/api\/v1\/payment-methods\/test_payment_method"
+        }
+    }
+}
