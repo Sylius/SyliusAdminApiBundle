@@ -36,8 +36,8 @@
 
         <service id="sylius.form.type.api_order" class="Sylius\Bundle\AdminApiBundle\Form\Type\OrderType">
             <argument>%sylius.model.order.class%</argument>
-            <argument>%sylius.form.type.api_order.validation_groups%</argument>
             <argument type="service" id="sylius.repository.locale" />
+            <argument>%sylius.form.type.api_order.validation_groups%</argument>
             <argument type="service" id="sylius.form.choice_list.loader.lazy_customer_loader" />
             <tag name="form.type" />
         </service>
