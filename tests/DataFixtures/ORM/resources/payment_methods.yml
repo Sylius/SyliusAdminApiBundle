@@ -15,12 +15,6 @@ Sylius\Component\Core\Model\PaymentMethod:
             - "@pay_by_check_translation1"
         channels: ["@channel_web"]
 
-Sylius\Bundle\PayumBundle\Model\GatewayConfig:
-    offline:
-        gatewayName: "Offline"
-        factoryName: "offline"
-        config: []
-
 Sylius\Component\Payment\Model\PaymentMethodTranslation:
     cash_on_delivery_translation1:
         name: "Cash on delivery"

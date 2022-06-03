@@ -1,0 +1,17 @@
+sylius_grid:
+    grids:
+        sylius_admin_api_payment_method:
+            driver:
+                name: doctrine/orm
+                options:
+                    class: "%sylius.model.payment_method.class%"
+                    repository:
+                        method: createListQueryBuilder
+                        arguments: ["%locale%"]
+            filters:
+                name:
+                    type: string
+                    options:
+                        fields: [translation.name]
+                code:
+                    type: string

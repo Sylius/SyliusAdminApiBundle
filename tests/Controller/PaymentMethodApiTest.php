@@ -19,8 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class PaymentMethodApiTest extends JsonApiTestCase
 {
-    /** @var array */
-    private static $authorizedHeaderWithContentType = [
+    private static array $authorizedHeaderWithContentType = [
         'HTTP_Authorization' => 'Bearer SampleTokenNjZkNjY2MDEwMTAzMDkxMGE0OTlhYzU3NzYyMTE0ZGQ3ODcyMDAwM2EwMDZjNDI5NDlhMDdlMQ',
         'CONTENT_TYPE' => 'application/json',
     ];
@@ -28,7 +27,7 @@ final class PaymentMethodApiTest extends JsonApiTestCase
     /**
      * @test
      */
-    public function it_denies_getting_payment_method_for_non_authenticated_user()
+    public function it_denies_getting_payment_method_for_non_authenticated_user(): void
     {
         $this->client->request('GET', '/api/v1/payment-methods/none');
 
@@ -39,7 +38,24 @@ final class PaymentMethodApiTest extends JsonApiTestCase
     /**
      * @test
      */
-    public function it_does_not_allow_to_show_payment_method_when_it_does_not_exist()
+    public function it_does_not_allow_to_show_payment_methods_list_when_access_is_denied(): void
+    {
+        $this->loadFixturesFromFiles([
+            'resources/channels.yml',
+            'resources/gateway_config.yml',
+            'resources/payment_methods.yml',
+        ]);
+
+        $this->client->request('GET', '/api/v1/payment-methods/');
+
+        $response = $this->client->getResponse();
+        $this->assertResponse($response, 'authentication/access_denied_response', Response::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_allow_to_show_payment_method_when_it_does_not_exist(): void
     {
         $this->loadFixturesFromFile('authentication/api_administrator.yml');
 
@@ -52,11 +68,12 @@ final class PaymentMethodApiTest extends JsonApiTestCase
     /**
      * @test
      */
-    public function it_allows_showing_payment_method()
+    public function it_allows_showing_payment_method(): void
     {
         $paymentMethods = $this->loadFixturesFromFiles([
             'authentication/api_administrator.yml',
             'resources/channels.yml',
+            'resources/gateway_config.yml',
             'resources/payment_methods.yml',
         ]);
 
@@ -70,9 +87,323 @@ final class PaymentMethodApiTest extends JsonApiTestCase
     }
 
     /**
-     * @return string
+     * @test
      */
-    private function getPaymentMethodUrl(PaymentMethodInterface $paymentMethod)
+    public function it_allows_indexing_payment_methods(): void
+    {
+        $this->loadFixturesFromFiles([
+            'authentication/api_administrator.yml',
+            'resources/channels.yml',
+            'resources/gateway_config.yml',
+            'resources/payment_methods.yml',
+        ]);
+
+        $this->client->request(
+            'GET',
+            '/api/v1/payment-methods/',
+            [],
+            [],
+            self::$authorizedHeaderWithContentType
+        );
+
+        $response = $this->client->getResponse();
+        $this->assertResponse($response, 'payment_method/index_response', Response::HTTP_OK);
+    }
+
+    /**
+     * @test
+     */
+    public function it_allows_creating_payment_method(): void
+    {
+        $this->loadFixturesFromFiles([
+            'authentication/api_administrator.yml',
+            'resources/channels.yml',
+            'resources/gateway_config.yml',
+        ]);
+
+        $data = <<<JSON
+{
+    "code": "test_payment_method",
+    "enabled": true,
+    "translations": {
+        "en_US": {
+            "name": "Test Payment Method",
+            "description": "Description of Test Payment Method",
+            "instructions": "Instructions of Test Payment Method"
+        }
+    },
+    "channels": ["WEB"],
+    "position": 1
+}
+JSON;
+
+        $this->client->request(
+            'POST',
+            '/api/v1/payment-methods/offline',
+            [],
+            [],
+            self::$authorizedHeaderWithContentType,
+            $data
+        );
+
+        $this->assertResponse(
+            $this->client->getResponse(),
+            'payment_method/create_response',
+            Response::HTTP_CREATED
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_allow_creating_payment_methods_when_not_authorized(): void
+    {
+        $this->loadFixturesFromFiles([
+            'resources/channels.yml',
+            'resources/gateway_config.yml',
+        ]);
+
+        $data = <<<JSON
+{
+    "code": "test_payment_method",
+    "enabled": true,
+    "translations": {
+        "en_US": {
+            "name": "Test Payment Method",
+            "description": "Description of Test Payment Method",
+            "instructions": "Instructions of Test Payment Method"
+        }
+    },
+    "channels": ["WEB"],
+    "position": 1
+}
+JSON;
+
+        $this->client->request(
+            'POST',
+            '/api/v1/payment-methods/offline',
+            [],
+            [],
+            [],
+            $data
+        );
+
+        $this->assertResponse(
+            $this->client->getResponse(),
+            'authentication/access_denied_response',
+            Response::HTTP_UNAUTHORIZED
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_allows_fully_updating_payment_method(): void
+    {
+        $paymentMethods = $this->loadFixturesFromFiles([
+            'authentication/api_administrator.yml',
+            'resources/channels.yml',
+            'resources/gateway_config.yml',
+            'resources/payment_methods.yml',
+        ]);
+
+        /** @var PaymentMethodInterface $paymentMethod */
+        $paymentMethod = $paymentMethods['cash_on_delivery'];
+
+        $data = <<<JSON
+{
+    "enabled": false,
+    "translations": {
+        "en_US": {
+            "name": "Fully Updated Test Payment Method",
+            "description": "Test Payment Method Description of payment method that was fully updated",
+            "instructions": "Instructions of fully updated payment method"
+        }
+    },
+    "channels": ["WEB"],
+    "position": 12
+}
+JSON;
+
+        $this->client->request(
+            'PUT',
+            $this->getPaymentMethodUrl($paymentMethod),
+            [],
+            [],
+            self::$authorizedHeaderWithContentType,
+            $data
+        );
+
+        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @test
+     */
+    public function it_allows_partially_updating_payment_method(): void
+    {
+        $paymentMethods = $this->loadFixturesFromFiles([
+            'authentication/api_administrator.yml',
+            'resources/channels.yml',
+            'resources/gateway_config.yml',
+            'resources/payment_methods.yml',
+        ]);
+
+        /** @var PaymentMethodInterface $paymentMethod */
+        $paymentMethod = $paymentMethods['cash_on_delivery'];
+
+        $data = <<<JSON
+{
+    "enabled": true
+}
+JSON;
+
+        $this->client->request(
+            'PATCH',
+            $this->getPaymentMethodUrl($paymentMethod),
+            [],
+            [],
+            self::$authorizedHeaderWithContentType,
+            $data
+        );
+
+        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_allow_full_updates_when_not_authorized(): void
+    {
+        $paymentMethods = $this->loadFixturesFromFiles([
+            'resources/channels.yml',
+            'resources/gateway_config.yml',
+            'resources/payment_methods.yml',
+        ]);
+
+        /** @var PaymentMethodInterface $paymentMethod */
+        $paymentMethod = $paymentMethods['cash_on_delivery'];
+
+        $data = <<<JSON
+{
+    "enabled": false,
+    "translations": {
+        "en_US": {
+            "name": "Fully Updated Test Payment Method",
+            "description": "Test Payment Method Description of payment method that was fully updated",
+            "instructions": "Instructions of fully updated payment method"
+        }
+    },
+    "channels": ["WEB"],
+    "position": 12
+}
+JSON;
+
+        $this->client->request(
+            'PUT',
+            $this->getPaymentMethodUrl($paymentMethod),
+            [],
+            [],
+            [],
+            $data
+        );
+
+        $this->assertResponse(
+            $this->client->getResponse(),
+            'authentication/access_denied_response',
+            Response::HTTP_UNAUTHORIZED
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_allow_partial_updates_when_not_authorized(): void
+    {
+        $paymentMethods = $this->loadFixturesFromFiles([
+            'resources/channels.yml',
+            'resources/gateway_config.yml',
+            'resources/payment_methods.yml',
+        ]);
+
+        /** @var PaymentMethodInterface $paymentMethod */
+        $paymentMethod = $paymentMethods['cash_on_delivery'];
+
+        $data = <<<JSON
+{
+    "enabled": true
+}
+JSON;
+
+        $this->client->request(
+            'PATCH',
+            $this->getPaymentMethodUrl($paymentMethod),
+            [],
+            [],
+            [],
+            $data
+        );
+
+        $this->assertResponse(
+            $this->client->getResponse(),
+            'authentication/access_denied_response',
+            Response::HTTP_UNAUTHORIZED
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_allows_deleting_payment_methods(): void
+    {
+        $paymentMethods = $this->loadFixturesFromFiles([
+            'authentication/api_administrator.yml',
+            'resources/channels.yml',
+            'resources/gateway_config.yml',
+            'resources/payment_methods.yml',
+        ]);
+
+        /** @var PaymentMethodInterface $paymentMethod */
+        $paymentMethod = $paymentMethods['cash_on_delivery'];
+
+        $this->client->request(
+            'DELETE',
+            $this->getPaymentMethodUrl($paymentMethod),
+            [],
+            [],
+            self::$authorizedHeaderWithContentType
+        );
+
+        $this->assertResponseCode($this->client->getResponse(), Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_allow_deleting_payment_methods_when_not_authorized(): void
+    {
+        $paymentMethods = $this->loadFixturesFromFiles([
+            'resources/channels.yml',
+            'resources/gateway_config.yml',
+            'resources/payment_methods.yml',
+        ]);
+
+        /** @var PaymentMethodInterface $paymentMethod */
+        $paymentMethod = $paymentMethods['cash_on_delivery'];
+
+        $this->client->request(
+            'DELETE',
+            $this->getPaymentMethodUrl($paymentMethod)
+        );
+
+        $this->assertResponse(
+            $this->client->getResponse(),
+            'authentication/access_denied_response',
+            Response::HTTP_UNAUTHORIZED
+        );
+    }
+
+    private function getPaymentMethodUrl(PaymentMethodInterface $paymentMethod): string
     {
         return '/api/v1/payment-methods/' . $paymentMethod->getCode();
     }
