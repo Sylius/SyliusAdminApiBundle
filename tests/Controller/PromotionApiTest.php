@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Tests\Sylius\Bundle\AdminApiBundle\Controller;
 
 use ApiTestCase\JsonApiTestCase;
+use Sylius\Bundle\CoreBundle\Application\Kernel as SyliusKernel;
 use Sylius\Component\Promotion\Model\PromotionInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -209,7 +210,11 @@ final class PromotionApiTest extends JsonApiTestCase
         $this->client->request('POST', '/api/v1/promotions/', [], [], static::$authorizedHeaderWithContentType);
 
         $response = $this->client->getResponse();
-        $this->assertResponse($response, 'promotion/create_validation_fail_response', Response::HTTP_BAD_REQUEST);
+        if (SyliusKernel::MINOR_VERSION === '10') {
+            $this->assertResponse($response, 'promotion/sylius1.10/create_validation_fail_response', Response::HTTP_BAD_REQUEST);
+        } else {
+            $this->assertResponse($response, 'promotion/create_validation_fail_response', Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
