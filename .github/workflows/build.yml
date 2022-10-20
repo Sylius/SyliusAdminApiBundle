@@ -24,8 +24,8 @@ jobs:
             fail-fast: false
             matrix:
                 php: [ "7.4", "8.0" ]
-                symfony: [ "^4.4", "5.4.*" ]
-                sylius: [ "1.10.*", "1.11.*" ]
+                symfony: [ "^4.4", "5.4.*", "^6.0"]
+                sylius: [ "1.10.*", "1.11.*", "~1.12.x-dev" ]
                 node: [ "10.x" ]
                 mysql: [ "8.0" ]
 
