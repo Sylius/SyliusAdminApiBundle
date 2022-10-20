@@ -36,6 +36,10 @@ jobs:
                         sylius: "1.10.*"
                     -   php: "8.0"
                         sylius: "1.11.*"
+                    -   symfony: "6.0"
+                        sylius: "1.10.*"
+                    -   symfony: "6.0"
+                        sylius: "1.11.*"
         env:
             APP_ENV: test_cached
             DATABASE_URL: "mysql://root:root@127.0.0.1/sylius?serverVersion=${{ matrix.mysql }}"
