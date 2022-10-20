@@ -32,6 +32,8 @@ jobs:
                 exclude:
                     -   php: "7.4"
                         sylius: "1.11.*"
+                    -   php: "7.4"
+                        sylius: "~1.12.x-dev"
                     -   php: "8.0"
                         sylius: "1.11.*"
                     -   symfony: "6.0"
