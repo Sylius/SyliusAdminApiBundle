@@ -68,7 +68,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Sylius\\Bundle\\AdminApiBundle\\": ""
+            "Sylius\\Bundle\\AdminApiBundle\\": "src/"
         }
     },
     "autoload-dev": {
