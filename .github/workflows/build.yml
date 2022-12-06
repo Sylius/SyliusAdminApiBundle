@@ -23,15 +23,15 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: [ "7.4", "8.0" ]
-                symfony: [ "^4.4", "5.4.*" ]
-                sylius: [ "1.10.*", "1.11.*" ]
-                node: [ "10.x" ]
-                mysql: [ "8.0" ]
-
+                php: ["8.0"]
+                symfony: ["^4.4", "^5.4"]
+                sylius: ["1.11.*", "1.12.*"]
+                node: ["12.x"]
+                mysql: ["8.0"]
                 exclude:
-                    -   php: "7.4"
-                        sylius: "1.11.*"
+                    - symfony: "^4.4"
+                      sylius: "1.12.*"
+
         env:
             APP_ENV: test_cached
             DATABASE_URL: "mysql://root:root@127.0.0.1/sylius?serverVersion=${{ matrix.mysql }}"
