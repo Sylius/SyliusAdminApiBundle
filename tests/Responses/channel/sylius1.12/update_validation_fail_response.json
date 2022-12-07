@@ -1,0 +1,47 @@
+{
+    "code": 400,
+    "message": "Validation Failed",
+    "errors": {
+        "children": {
+            "name": {
+                "errors": [
+                    "Please enter channel name."
+                ]
+            },
+            "description": {},
+            "enabled": {},
+            "hostname": {},
+            "color": {},
+            "locales": {},
+            "defaultLocale": {},
+            "currencies": {},
+            "countries": {},
+            "defaultTaxZone": {},
+            "taxCalculationStrategy": {
+                "errors": [
+                    "This value should not be blank."
+                ]
+            },
+            "themeName": {},
+            "contactEmail": {},
+            "contactPhoneNumber": {},
+            "skippingShippingStepAllowed": {},
+            "skippingPaymentStepAllowed": {},
+            "accountVerificationRequired": {},
+            "shippingAddressInCheckoutRequired": {},
+            "shopBillingData": {
+                "children": {
+                    "taxId": {},
+                    "company": {},
+                    "countryCode": {},
+                    "street": {},
+                    "city": {},
+                    "postcode": {}
+                }
+            },
+            "menuTaxon": {},
+            "code": {},
+            "baseCurrency": {}
+        }
+    }
+}

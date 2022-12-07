@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Tests\Sylius\Bundle\AdminApiBundle\Controller;
 
 use ApiTestCase\JsonApiTestCase;
+use Sylius\Bundle\CoreBundle\Application\Kernel as SyliusKernel;
 use Sylius\Component\Channel\Model\ChannelInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -65,7 +66,12 @@ final class ChannelApiTest extends JsonApiTestCase
         $this->client->request('POST', '/api/v1/channels/', [], [], static::$authorizedHeaderWithContentType);
 
         $response = $this->client->getResponse();
-        $this->assertResponse($response, 'channel/create_validation_fail_response', Response::HTTP_BAD_REQUEST);
+
+        if (SyliusKernel::VERSION_ID >= 11200) {
+            $this->assertResponse($response, 'channel/sylius1.12/create_validation_fail_response', Response::HTTP_BAD_REQUEST);
+        } else {
+            $this->assertResponse($response, 'channel/sylius1.11/create_validation_fail_response', Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -200,7 +206,12 @@ EOT;
         $this->client->request('PUT', $this->getChannelUrl($channel), [], [], static::$authorizedHeaderWithContentType);
 
         $response = $this->client->getResponse();
-        $this->assertResponse($response, 'channel/update_validation_fail_response', Response::HTTP_BAD_REQUEST);
+
+        if (SyliusKernel::VERSION_ID >= 11200) {
+            $this->assertResponse($response, 'channel/sylius1.12/update_validation_fail_response', Response::HTTP_BAD_REQUEST);
+        } else {
+            $this->assertResponse($response, 'channel/sylius1.11/update_validation_fail_response', Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
