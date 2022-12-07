@@ -51,9 +51,6 @@
         "symfony/web-profiler-bundle": "^4.4 || ^5.2",
         "vimeo/psalm": "^4.6.4"
     },
-    "conflict": {
-        "friendsofsymfony/rest-bundle": "^3.1"
-    },
     "config": {
         "sort-packages": true,
         "allow-plugins": {
