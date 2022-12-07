@@ -57,6 +57,9 @@ $bundles = [
 
 if (SyliusKernel::VERSION_ID < 11200) {
     $bundles[Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle::class] = ['all' => true];
+} else {
+    $bundles[League\FlysystemBundle\FlysystemBundle::class] = ['all' => true];
+    $bundles[Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class] = ['all' => true];
 }
 
 return $bundles;

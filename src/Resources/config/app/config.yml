@@ -20,6 +20,16 @@ sylius_admin_api:
             classes:
                 model: "%sylius.model.admin_user.class%"
 
+doctrine:
+    orm:
+        entity_managers:
+            default:
+                mappings:
+                    SyliusAdminApiBundle:
+                        type: xml
+                        dir: "Resources/config/doctrine/model"
+                        prefix: Sylius\Bundle\AdminApiBundle\Model
+
 jms_serializer:
     metadata:
         directories:
