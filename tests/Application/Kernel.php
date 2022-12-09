@@ -65,10 +65,12 @@ final class Kernel extends BaseKernel
             foreach ($this->getConfigurationDirectories() as $confDir) {
                 $this->loadRoutesConfiguration($routes, $confDir);
             }
-        } else {
-            foreach ($this->getConfigurationDirectories() as $confDir) {
-                $this->loadRoutesCollection($routes, $confDir);
-            }
+
+            return;
+        }
+
+        foreach ($this->getConfigurationDirectories() as $confDir) {
+            $this->loadRoutesCollection($routes, $confDir);
         }
     }
 
