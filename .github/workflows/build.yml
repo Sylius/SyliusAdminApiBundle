@@ -23,22 +23,22 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: [ "7.4", "8.0" ]
-                symfony: [ "^4.4", "5.4.*" ]
-                sylius: [ "1.10.*", "1.11.*" ]
-                node: [ "10.x" ]
-                mysql: [ "8.0" ]
-
+                php: ["8.0"]
+                symfony: ["^4.4", "^5.4"]
+                sylius: ["1.11.*", "1.12.*"]
+                node: ["12.x"]
+                mysql: ["8.0"]
                 exclude:
-                    -   php: "7.4"
-                        sylius: "1.11.*"
+                    - symfony: "^4.4"
+                      sylius: "1.12.*"
+
         env:
             APP_ENV: test_cached
             DATABASE_URL: "mysql://root:root@127.0.0.1/sylius?serverVersion=${{ matrix.mysql }}"
 
         steps:
             -
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -
                 name: Setup PHP
@@ -51,7 +51,7 @@ jobs:
 
             -
                 name: Setup Node
-                uses: actions/setup-node@v1
+                uses: actions/setup-node@v2
                 with:
                     node-version: "${{ matrix.node }}"
 
@@ -69,7 +69,7 @@ jobs:
             -
                 name: Get Composer cache directory
                 id: composer-cache
-                run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+                run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
             -
                 name: Cache Composer
@@ -95,7 +95,29 @@ jobs:
 
             -
                 name: Install PHP dependencies
-                run: composer install --no-interaction
+                run: composer install --no-interaction --no-scripts
+
+            -
+                name: Get Yarn cache directory
+                id: yarn-cache
+                run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+            -
+                name: Cache Yarn
+                uses: actions/cache@v3
+                with:
+                    path: ${{ steps.yarn-cache.outputs.dir }}
+                    key: ${{ runner.os }}-node-${{ matrix.node }}-yarn-${{ hashFiles('**/package.json **/yarn.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-node-${{ matrix.node }}-yarn-
+
+            -
+                name: Install JS dependencies
+                run: (cd tests/Application && yarn install)
+
+            -
+                name: Build assets
+                run: (cd tests/Application && yarn encore prod)
 
             -   name: Check out database schema update
                 run: |

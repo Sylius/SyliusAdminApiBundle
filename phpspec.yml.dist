@@ -2,4 +2,4 @@ suites:
     main:
         namespace: Sylius\Bundle\AdminApiBundle
         psr4_prefix: Sylius\Bundle\AdminApiBundle
-        src_path: .
+        src_path: Sylius\Bundle\AdminApiBundle\src
