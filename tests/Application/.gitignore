@@ -5,8 +5,11 @@
 !/public/media/image/
 /public/media/image/*
 !/public/media/image/.gitignore
+/public/build/admin
+/public/build/shop
 
 /node_modules
+/yarn.lock
 
 ###> symfony/framework-bundle ###
 /.env.*.local
