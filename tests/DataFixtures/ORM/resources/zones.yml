@@ -1,5 +1,5 @@
 Sylius\Component\Addressing\Model\ZoneMember:
-    member_{NL, BE}:
+    member_{BE, NL}:
         code: <current()>
 
 Sylius\Component\Addressing\Model\Zone:
@@ -7,4 +7,4 @@ Sylius\Component\Addressing\Model\Zone:
         code: EU
         name: European Union
         type: country
-        members: ["@member_NL", "@member_BE"]
+        members: ["@member_BE", "@member_NL"]
