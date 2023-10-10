@@ -25,6 +25,7 @@ class ApiAccessTokenFixture extends AbstractResourceFixture
 
     protected function configureResourceNode(ArrayNodeDefinition $resourceNode): void
     {
+        /** @psalm-suppress UndefinedInterfaceMethod,PossiblyUndefinedMethod */
         $resourceNode
             ->children()
                 ->scalarNode('client')->cannotBeEmpty()->end()

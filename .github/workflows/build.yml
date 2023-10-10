@@ -7,9 +7,6 @@ on:
     pull_request: ~
     release:
         types: [created]
-    schedule:
-        -
-            cron: "0 1 * * 6" # Run at 1am every Saturday
     workflow_dispatch: ~
 
 jobs:
@@ -24,7 +21,7 @@ jobs:
             fail-fast: false
             matrix:
                 php: ["8.0"]
-                symfony: ["^5.4"]
+                symfony: ["^5.4", "^6.0"]
                 sylius: ["1.11.*", "1.12.*"]
                 node: ["16.x"]
                 mysql: ["8.0"]

@@ -35,13 +35,13 @@ final class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('sylius_admin_api');
+
         /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
-                ->scalarNode('driver')->defaultValue(SyliusResourceBundle::DRIVER_DOCTRINE_ORM)->end()
-            ->end()
+                ->scalarNode('driver')->defaultValue(SyliusResourceBundle::DRIVER_DOCTRINE_ORM)
         ;
 
         $this->addResourcesSection($rootNode);
@@ -51,6 +51,7 @@ final class Configuration implements ConfigurationInterface
 
     private function addResourcesSection(ArrayNodeDefinition $node): void
     {
+        /** @psalm-suppress PossiblyUndefinedMethod,UndefinedInterfaceMethod */
         $node
             ->children()
                 ->arrayNode('resources')

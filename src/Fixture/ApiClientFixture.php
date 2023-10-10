@@ -25,6 +25,7 @@ class ApiClientFixture extends AbstractResourceFixture
 
     protected function configureResourceNode(ArrayNodeDefinition $resourceNode): void
     {
+        /** @psalm-suppress UndefinedInterfaceMethod,PossiblyUndefinedMethod */
         $resourceNode
             ->children()
                 ->scalarNode('random_id')->cannotBeEmpty()->end()
