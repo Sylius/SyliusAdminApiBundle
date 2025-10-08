@@ -1,5 +1,7 @@
-SyliusAdminApiBundle
-===============
+<h1 align="center">SyliusAdminApiBundle</h1>
+
+> [!WARNING]  
+> This bundle is deprecated. The new way of building APIs in Sylius is with [Sylius Api](https://docs.sylius.com/getting-started-with-sylius/using-api).
 
 Sylius REST API bundle.
 
